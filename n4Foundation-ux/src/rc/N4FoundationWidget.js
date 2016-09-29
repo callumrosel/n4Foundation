@@ -125,10 +125,12 @@ define(['nmodule/webEditors/rc/fe/baja/BaseEditor',
     });
 
     that.jq().find(".popup").on("click", function (e) {
+      //Trigger Popup
       var popup = new foundation.Reveal($('#popup'), dom);
       popup.open();
     });
     
+    //Initialize foundation once everything is loaded
     $(dom).ready(function() {
        $(this).foundation();
     });
