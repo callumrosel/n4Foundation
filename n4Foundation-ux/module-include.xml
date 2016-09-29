@@ -1,0 +1,10 @@
+<!-- Types -->
+<types>
+  <!--com.conserveit.ux-->
+  <type class="com.conserveit.ux.BN4FoundationWidget" name="N4FoundationWidget">
+  	  	<agent><on type="baja:Component"/></agent>
+  </type>
+
+  <!--com.conserveit.ux.require-->
+  <type class="com.conserveit.ux.require.BRequireJsConfigFoundation" name="RequireJsConfigFoundation"/>
+</types>

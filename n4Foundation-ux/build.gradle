@@ -1,0 +1,125 @@
+/*
+ * Copyright (c) 2016 callum. All Rights Reserved.
+ */
+
+apply from: "${System.getenv("niagara_home")}/etc/gradle/niagara.gradle"
+
+
+ext {
+  name = "n4Foundation"
+  project.version = "0.1.0"
+  project.group = "callum"
+  description = "Foundation Demo Module"
+}
+
+niagaraModule {
+  preferredSymbol = "n4Fndtn"
+  moduleName = "n4Foundation"
+  runtimeProfile = "ux"
+}
+
+dependencies {
+  compile 'Tridium:js-ux:4.0.0'
+  compile "Tridium:nre"
+  compile "Tridium:baja"
+  compile "Tridium:web-rt"
+  compile "Tridium:workbench-wb"
+  
+}
+
+jar {
+  from('src') {
+    include 'jsdoc/'
+    include 'rc/'
+  }
+}
+
+moduleTestJar {
+  from('srcTest') {
+    include 'rc/'
+  }
+}
+
+
+
+niagaraRjs {
+  builds = [
+    'n4Foundation': [
+      rootDir: 'src/rc',
+      include: [
+        'nmodule/n4Foundation/rc/n4Foundation.run',
+        'nmodule/n4Foundation/rc/N4FoundationWidget'
+      ]
+    ]
+  ]
+
+  jsdocBuilds = [
+    'n4Foundation': [
+      source: project.fileTree('.') {
+        include "src/rc/**/*.js"
+        include "README.md"
+        exclude "src/rc/**/*.built.js"
+        exclude "src/rc/**/*.min.js"
+        exclude "src/rc/bower_components/*"
+        exclude "src/rc/node_modules/*"
+        exclude "src/rc/js/vendor/*"
+      },
+      destinationDir: 'src/jsdoc',
+      options: [ '--tutorials', file('tutorials').toPath() ]
+    ]
+  ]
+
+  options = [
+    //BajaScript and lexicons cannot legitimately start without running a
+    //station, so disable these plugins outright. Note that this not a standard
+    //r.js option - it's only used by the niagara-rjs plugin.
+    disablePlugins: [ 'baja', 'lex', 'css' ],
+
+    //If you're sharing this code with other modules that use Handlebars,
+    //it's likely these libraries will already be in the browser cache, so
+    //it makes sense to exclude them from the build. If you're certain this
+    //will be a standalone app, it's okay to include these libraries in the
+    //final build to save a few HTTP calls on first load.
+    exclude: [ 'Handlebars', 'underscore', 'hbs' ],
+
+    //I18N in the require-handlebars-plugin is not currently supported for
+    //Niagara and must be manually disabled.
+    //Auto-registration of helpers expects them to be in the /template/helpers
+    //directory. It's best to disable this and explicitly register your
+    //helpers with Handlebars.registerHelper().
+    hbs: [
+      disableHelpers: true,
+      disableI18n: true
+    ],
+
+    //Set up paths the build needs to know about.
+    paths: [
+      //Point n4Foundation module at src directory, using the nmodule convention
+      'nmodule/n4Foundation': 'src',
+
+      //exclude jquery/bajaux/Promise altogether
+      'jquery': 'empty:',
+      'bajaux': 'empty:',
+      'Promise': 'empty:',
+      'nmodule/webEditors': 'empty:',
+
+
+      //make Handlebars and associated libraries available to run during the
+      //build process, as templates will be precompiled.
+      //Note that if you need to pull module resources from other modules,
+      //they must be included in the Gradle file as compile-time dependencies.
+      'Handlebars': moduleResource('js-ux', 'rc/handlebars/handlebars-v2.0.0'),
+      'hbs': moduleResource('js-ux', 'rc/require-handlebars-plugin/hbs'),
+      'i18nprecompile': moduleResource('js-ux', 'rc/require-handlebars-plugin/hbs/i18nprecompile'),
+      'json2': moduleResource('js-ux', 'rc/require-handlebars-plugin/hbs/json2'),
+      'underscore': moduleResource('js-ux', 'rc/underscore/underscore'),
+
+      'foundation': 'src/rc/js/vendor/foundation',
+    ],
+
+    // RequireJS optimization with Rhino can occasionally cause a stack
+    // overflow if a module is particularly complex and the default JVM stack
+    // size is set too low. Adjust stack size as needed.
+    rhinoJvmArgs: [ '-Xss4m' ]
+  ]
+}

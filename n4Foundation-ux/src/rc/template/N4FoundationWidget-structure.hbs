@@ -1,0 +1,42 @@
+{{!this is the template for N4FoundationWidget.}}
+{{!it expects an array of strings and assembles them into buttons.}}
+
+<div class="N4FoundationWidget">
+  <div class="N4FoundationWidget-header">
+    <p>
+      <button class='ux-btn popup' type='button'>Launch Popup</button>
+    </p>
+    <p>
+      {{ titleText }}
+    </p>
+    <p>
+      <span class="N4FoundationWidget-selected-slot-text">{{ selectedSlotText }}</span>
+      <span class="N4FoundationWidget-selected-slot"></span>
+    </p>
+  </div>
+  <div class="N4FoundationWidget-content"></div>
+</div>
+
+<div class="reveal" id="popup" data-reveal>
+  
+  <ul class="tabs" data-tabs id="circuit-tabs">
+      <li class="tabs-title is-active"><a href="#tab1" aria-selected="true">Tab 1</a></li>
+      <li class="tabs-title"><a href="#tab2">Tab 2</a></li>
+  </ul>
+
+  <div class="tabs-content" data-tabs-content="circuit-tabs">
+    <div class="tabs-panel is-active" id="tab1">
+    </div>
+    <div class="tabs-panel" id="tab2">
+    </div>
+    <div>
+      <button class='ux-btn float-left' type='button' data-close data-slot='Cancel'>Cancel</button>
+      <button class='ux-btn float-right' type='button' data-slot='Save'>Save</button>
+    </div>
+  </div>
+
+  <button class="close-button" data-close aria-label="Close modal" type="button">
+      <span aria-hidden="true">&times;</span>
+  </button>
+
+</div>

@@ -1,0 +1,24 @@
+{
+  "name": "n4Foundation",
+  "description": "Foundation Demo Module",
+  "version": "0.1.0",
+  "homepage": "",
+  "author": {
+    "name": "callum",
+    "email": "crosel@airmaster.com.au"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt ci"
+  },
+  "devDependencies": {
+    "grunt": "~1.0.1",
+    "grunt-niagara": "^0.1.23"
+  },
+  "keywords": []
+}
